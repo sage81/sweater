@@ -1,6 +1,7 @@
 package ua.yava.sweater.controller;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import ua.yava.sweater.domain.Message;
 import ua.yava.sweater.domain.User;
@@ -57,7 +58,7 @@ public class MainController {
 
         Message message = new Message(text, tag, user);
 
-        if (file != null) {
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
             File uploadDir = new File(uploadPath);
 
             if (!uploadDir.exists()) {
