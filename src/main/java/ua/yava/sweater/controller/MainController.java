@@ -6,7 +6,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,8 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
@@ -65,11 +62,10 @@ public class MainController {
 
         if (bindingResult.hasErrors()) {
 
-            Collector<FieldError, ?, Map<String, String>> collector = Collectors.toMap(
-                    fieldError -> fieldError.getField() + "Error",
-                    FieldError::getDefaultMessage);
+            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
 
-            Map<String, String> errorsMap = bindingResult.getFieldErrors().stream().collect(collector);
+            model.mergeAttributes(errorsMap);
+            model.addAttribute("message", message);
 
         } else {
 
@@ -86,6 +82,7 @@ public class MainController {
                 message.setFilename(resultFilename);
             }
 
+            model.addAttribute("message", null);
             messageRepo.save(message);
 
         }
@@ -96,4 +93,6 @@ public class MainController {
 
         return "main";
     }
+
+
 }
