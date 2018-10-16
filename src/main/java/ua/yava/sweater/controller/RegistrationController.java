@@ -3,10 +3,12 @@ package ua.yava.sweater.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ua.yava.sweater.domain.User;
 import ua.yava.sweater.service.UserService;
 
@@ -24,9 +26,19 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
+    public String addUser(
+            @RequestParam("passwordConfirmation") String passwordConfirm,
+            @Valid User user,
+            BindingResult bindingResult,
+            Model model) {
 
-        if (user.getPassword() != null && !user.getPassword().equals(user.getPasswordConfirmation())) {
+        boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
+
+        if (isConfirmEmpty) {
+            model.addAttribute("passwordConfirmationError","Password confirmation cannot be empty");
+        }
+
+        if (isConfirmEmpty && !user.getPassword().equals(passwordConfirm)) {
             model.addAttribute("passwordError", "Passwords are different!");
         }
 

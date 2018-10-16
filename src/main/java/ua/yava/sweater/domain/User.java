@@ -22,9 +22,9 @@ public class User implements UserDetails {
     @NotBlank(message = "Password cannot be empty")
     private String password;
 
-    @Transient
-    @NotBlank(message = "Password confirmation cannot be empty")
-    private String passwordConfirmation;
+//    @Transient
+//    @NotBlank(message = "Password confirmation cannot be empty")
+//    private String passwordConfirmation;
 
     private boolean active;
 
@@ -123,11 +123,11 @@ public class User implements UserDetails {
         this.activationCode = activationCode;
     }
 
-    public String getPasswordConfirmation() {
-        return passwordConfirmation;
-    }
-
-    public void setPasswordConfirmation(String passwordConfirmation) {
-        this.passwordConfirmation = passwordConfirmation;
-    }
+//    public String getPasswordConfirmation() {
+//        return passwordConfirmation;
+//    }
+//
+//    public void setPasswordConfirmation(String passwordConfirmation) {
+//        this.passwordConfirmation = passwordConfirmation;
+//    }
 }
