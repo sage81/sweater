@@ -42,7 +42,7 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Passwords are different!");
         }
 
-        if (bindingResult.hasErrors()) {
+        if (isConfirmEmpty || bindingResult.hasErrors()) {
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errors);
             return "registration";
@@ -61,13 +61,17 @@ public class RegistrationController {
 
         boolean isActivated = userService.activateUser(code);
         String msg;
+        String msgType;
 
         if (isActivated) {
+            msgType = "success";
             msg = "User successfully activated";
         } else {
+            msgType = "danger";
             msg = "Activation code is not found";
         }
 
+        model.addAttribute("messageType", msgType);
         model.addAttribute("message", msg);
 
         return "login";
